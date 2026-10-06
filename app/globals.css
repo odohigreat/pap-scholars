@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* Change brand tokens here; semantic utilities and button variants follow them. */
+:root {
+  color-scheme: light;
+  --brand-primary: #244c43;
+  --brand-primary-hover: #19392f;
+  --brand-accent: #d5af68;
+  --brand-on-primary: #ffffff;
+  --background: #f8f9f6;
+  --surface: #ffffff;
+  --surface-muted: #eef2ed;
+  --foreground: #172820;
+  --muted: #59665e;
+  --border: #d5ddd5;
+  --focus: #326e60;
+  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-heading: var(--font-body);
+  --page-width: 75rem;
+  --reading-width: 45rem;
+  --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --section-space: clamp(3rem, 7vw, 6rem);
+}
+
+@theme inline {
+  --color-primary: var(--brand-primary);
+  --color-primary-hover: var(--brand-primary-hover);
+  --color-on-primary: var(--brand-on-primary);
+  --color-accent: var(--brand-accent);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-focus: var(--focus);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --spacing-gutter: var(--page-gutter);
+  --spacing-section: var(--section-space);
+}
+
+@theme {
+  --radius-control: 0.75rem;
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 8px 32px rgb(23 40 32 / 0.06);
+}
+
+@layer base {
+  body {
+    min-height: 100svh;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h2 { font-size: clamp(2rem, 3.5vw, 3rem); }
+  h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  ::selection {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+}
+
+/* Use alongside Tailwind's standard spacing scale and responsive modifiers. */
+@utility page-container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+@utility reading-container {
+  width: 100%;
+  max-width: var(--reading-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+@utility section-spacing {
+  padding-block: var(--section-space);
+}
+
+@utility text-lead {
+  font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+@layer components {
+  /* Combine .btn with a variant and optional size, e.g. btn btn-primary btn-sm. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .btn-primary {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--brand-primary);
+  }
+
+  @media (hover: hover) {
+    .btn-primary:hover { background: var(--brand-primary-hover); }
+    .btn-secondary:hover, .btn-ghost:hover { background: var(--surface-muted); }
+  }
+
+  .btn-sm { padding: 0.625rem 1rem; font-size: 0.875rem; }
+  .btn-lg { min-height: 3.25rem; padding: 1rem 1.5rem; font-size: 1rem; }
+
+  .btn:disabled, .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+}
