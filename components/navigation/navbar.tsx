@@ -3,13 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { marketingLinks } from "../../constants/navigation";
 import { Brand } from "../layout/brand";
 
 export function Navbar() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const [previousPath, setPreviousPath] = useState(pathname);
+  if (previousPath !== pathname) {
+    setPreviousPath(pathname);
+    setOpenPath(null);
+  }
+  const open = openPath === pathname;
+  const setOpen = useCallback((value: boolean) => setOpenPath(value ? pathname : null), [pathname]);
   const [scrolled, setScrolled] = useState(false);
   const [headerWidth, setHeaderWidth] = useState(0);
   const reduceMotion = useReducedMotion();
@@ -38,8 +45,6 @@ export function Navbar() {
     };
   }, []);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
-
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -63,7 +68,7 @@ export function Navbar() {
       document.removeEventListener("pointerdown", onPointerDown);
       desktop.removeEventListener("change", onResize);
     };
-  }, [open]);
+  }, [open, setOpen]);
 
   return (
     <header ref={headerRef} className="sticky top-0 z-50 h-20" onBlur={(event) => {

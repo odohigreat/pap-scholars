@@ -1,0 +1,17 @@
+.student-dashboard {
+  --brand-primary: #2456a6;
+  --brand-primary-hover: #1c4384;
+  --background: #f5f7fb;
+  --foreground: #182b49;
+  --muted: #5d6b82;
+  --border: #e1e7f0;
+  --surface-muted: #eef3fa;
+  --focus: #2456a6;
+}
+.dashboard-panel { border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface); }
+.dashboard-nav { display: flex; min-height: 3rem; align-items: center; gap: .8rem; border-radius: .75rem; padding: .65rem 1rem; font-size: .875rem; font-weight: 500; color: var(--muted); transition: background-color 160ms, color 160ms; }
+.dashboard-nav:hover { background: var(--surface-muted); color: var(--brand-primary); }
+.dashboard-nav[aria-current="page"] { background: #eaf1fc; color: var(--brand-primary); font-weight: 600; }
+.dashboard-progress { height: .4rem; overflow: hidden; border-radius: 999px; background: #e9eef5; }
+.dashboard-progress > span { display: block; height: 100%; border-radius: inherit; background: var(--brand-primary); }
+@media (prefers-reduced-motion: reduce) { .dashboard-nav { transition: none; } }

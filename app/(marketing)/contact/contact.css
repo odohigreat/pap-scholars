@@ -1,0 +1,6 @@
+.contact-input{display:block;width:100%;min-width:0;min-height:3.25rem;border:1px solid var(--border);border-radius:var(--radius-control);background:white;padding:.8rem 1rem;font-size:1rem;line-height:1.6;color:var(--foreground);transition:border-color 160ms ease,box-shadow 160ms ease}
+.contact-input::placeholder{color:#71819a}
+.contact-input:focus{outline:2px solid var(--focus);outline-offset:2px;border-color:var(--focus)}
+.contact-input[aria-invalid="true"]{border-color:#b12f3a}
+textarea.contact-input{resize:vertical;min-height:10rem}
+@media(prefers-reduced-motion:reduce){.contact-input{transition:none}}

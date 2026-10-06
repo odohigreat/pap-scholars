@@ -21,7 +21,7 @@ export default function JournalPage() {
           <p className="mt-4 text-xs text-muted">Demo edition · Six stories to explore</p>
         </Reveal>
         <section aria-label="Featured article">
-          <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.15em] text-primary"><span aria-hidden="true" className="h-px w-8 bg-accent" />Editor's pick</p>
+          <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.15em] text-primary"><span aria-hidden="true" className="h-px w-8 bg-accent" />Editor’s pick</p>
           <Reveal><BlogCard post={journalArticles[0]} prominent /></Reveal>
         </section>
         <JournalBrowser articles={journalArticles} />

@@ -45,14 +45,14 @@ export function Hero() {
   }, []);
 
   useEffect(() => {
-    if (ready[requestedIndex]) setActiveIndex(requestedIndex);
-  }, [ready, requestedIndex]);
-
-  useEffect(() => {
     if (!rotating) return;
-    const timer = window.setTimeout(() => setRequestedIndex((activeIndex + 1) % slides.length), ROTATION_DELAY);
+    const timer = window.setTimeout(() => {
+      const next = (activeIndex + 1) % slides.length;
+      setRequestedIndex(next);
+      if (ready[next]) setActiveIndex(next);
+    }, ROTATION_DELAY);
     return () => window.clearTimeout(timer);
-  }, [rotating, activeIndex]);
+  }, [rotating, activeIndex, ready]);
 
   const slide = slides[activeIndex];
 
@@ -91,7 +91,10 @@ export function Hero() {
               preload={index === 0}
               loading={index === 0 ? undefined : requestedIndex === index ? "eager" : "lazy"}
               sizes="100vw"
-              onLoad={() => setReady(previous => previous[index] ? previous : previous.map((value, i) => i === index || value))}
+              onLoad={() => {
+                setReady(previous => previous[index] ? previous : previous.map((value, i) => i === index || value));
+                if (requestedIndex === index) setActiveIndex(index);
+              }}
               className={`object-cover ${item.position}`}
             />
           </motion.div>
@@ -125,7 +128,7 @@ export function Hero() {
               Explore courses
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
-            <Link href="#how-it-works" className="btn btn-lg border-on-primary/50 bg-on-primary/10 text-on-primary backdrop-blur-md hover:border-on-primary/80 hover:bg-on-primary/20">How learning works</Link>
+            <Link href="/courses" className="btn btn-lg border-on-primary/50 bg-on-primary/10 text-on-primary backdrop-blur-md hover:border-on-primary/80 hover:bg-on-primary/20">Find your course</Link>
           </div>
           <motion.p
             key={slide.caption}

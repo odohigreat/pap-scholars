@@ -16,7 +16,7 @@ export function HowLearningWorks() {
         <Reveal className="lg:pt-2">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">How learning works</p>
           <h2 id="how-heading" className="max-w-md text-[clamp(2.25rem,3.5vw,3.25rem)] font-semibold leading-[1.12] tracking-[-0.035em] text-foreground">A clear path.<br />Your own pace.</h2>
-          <p className="mt-6 max-w-sm text-base leading-relaxed text-muted">You don't need to have it all figured out. Start with an interest, then take it one step at a time.</p>
+          <p className="mt-6 max-w-sm text-base leading-relaxed text-muted">You don’t need to have it all figured out. Start with an interest, then take it one step at a time.</p>
           <Link href="/register" className="btn btn-primary mt-8 gap-3">Start your journey <span aria-hidden="true">↗</span></Link>
           <div aria-hidden="true" className="mt-10 flex items-center gap-2"><span className="h-px w-12 bg-accent" /><span className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted">From curiosity to progress</span></div>
         </Reveal>
