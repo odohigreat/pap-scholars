@@ -4,4 +4,3 @@ out/
 *.tsbuildinfo
 .env*
 !.env.example
-!.env.local
