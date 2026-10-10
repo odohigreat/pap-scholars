@@ -1,7 +1,7 @@
 .auth-shell {
   --brand-primary: #2456a6;
   --brand-primary-hover: #1c4384;
-  --background: #f9fbfe;
+  --background: #fafaf8;
   --foreground: #182b49;
   --muted: #617089;
   --border: #dce3ed;
@@ -22,3 +22,8 @@
 .auth-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px rgb(196 61 71 / 12%); }
 .auth-input:disabled { background: #f0f3f8; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .auth-input { transition: none; } }
+
+.auth-story { min-height: 100svh; }
+.auth-shell main { padding-block: 3rem; }
+@media (min-width: 1024px) { .auth-story > div:last-child { position: sticky; top: 0; min-height: 100svh; max-height: 68rem; } }
+@media (max-width: 479px) { .auth-shell header { align-items: flex-start; } .auth-shell main { padding-top: 2rem; } }

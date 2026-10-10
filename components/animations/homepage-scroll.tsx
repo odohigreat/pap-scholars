@@ -32,8 +32,8 @@ export function HomepageScroll() {
           gsap.timeline({
             scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: 0.6 },
           })
-            .fromTo(image, { y: 0, scale: 1.02 }, { y: desktop ? 28 : 12, scale: desktop ? 1.065 : 1.03, ease: "none" }, 0)
-            .to(content, { y: desktop ? -24 : -10, ease: "none" }, 0);
+            .fromTo(image, { y: 0, scale: 1 }, { y: desktop ? 12 : 0, scale: 1, ease: "none" }, 0)
+            .to(content, { y: 0, ease: "none" }, 0);
         }
 
         // The existing connecting lines gradually settle into view as each stage is reached.

@@ -28,7 +28,7 @@ export default async function ArticlePage({ params }: ArticleProps) {
     <div style={marketingTheme} className="bg-surface pb-section">
       <article>
         <header className="page-container pb-10 pt-10 sm:pb-14 sm:pt-14">
-          <Link href="/blog" className="inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary hover:underline"><span aria-hidden="true">←</span> Back to the journal</Link>
+          <Link href="/blog" className="inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary hover:underline"> Back to the journal</Link>
           <Reveal className="mx-auto mt-8 max-w-4xl">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-[var(--support-green)]">{article.category}</p>
             <h1 className="text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.1] tracking-[-0.04em]">{article.title}</h1>
@@ -41,15 +41,15 @@ export default async function ArticlePage({ params }: ArticleProps) {
             <Image src={article.image} alt={article.alt} fill preload sizes="(min-width: 1200px) 1120px, 95vw" className="object-cover object-center" />
           </div>
         </div>
-        <div className="mx-auto max-w-[46rem] px-gutter py-12 sm:py-16">
+        <div className="article-reading mx-auto max-w-[46rem] px-gutter py-12 sm:py-16">
           <p className="text-lg leading-[1.85] text-foreground">{article.introduction}</p>
           {article.sections.map(section => (
             <section key={section.heading} className="mt-10">
-              <h2 className="text-2xl font-semibold leading-snug tracking-tight">{section.heading}</h2>
+              <h2 className="text-2xl font-normal leading-snug tracking-tight">{section.heading}</h2>
               {section.paragraphs.map(paragraph => <p key={paragraph} className="mt-5 text-base leading-[1.9] text-muted sm:text-lg">{paragraph}</p>)}
             </section>
           ))}
-          <div className="mt-12 border-t border-border pt-6"><p className="text-xs text-muted">From The PAP Journal · Demo editorial content</p><Link href="/blog" className="mt-3 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary hover:underline"><span aria-hidden="true">←</span> Explore more stories</Link></div>
+          <div className="mt-12 border-t border-border pt-6"><p className="text-xs text-muted">From The PAP Journal · Demo editorial content</p><Link href="/blog" className="mt-3 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary hover:underline"> Explore more stories</Link></div>
         </div>
       </article>
       <section aria-labelledby="related-heading" className="page-container border-t border-border pt-12">

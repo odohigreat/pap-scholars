@@ -2,6 +2,7 @@ export interface LearningLesson {
   id: string;
   title: string;
   description: string;
+  content?: string;
   durationMinutes: number;
   videoSrc: string;
 }

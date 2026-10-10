@@ -16,13 +16,13 @@ const slides = [
 ] as const;
 
 const heroColors = {
-  "--brand-primary": "#0759d4",
-  "--brand-primary-hover": "#0847a8",
-  "--brand-accent": "#e7b34d",
+  "--brand-primary": "#2456a6",
+  "--brand-primary-hover": "#1b4385",
+  "--brand-accent": "#d5af68",
   "--focus": "#ffffff",
 } as CSSProperties;
 
-const ROTATION_DELAY = 3000;
+const ROTATION_DELAY = 7000;
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -78,8 +78,7 @@ export function Hero() {
             initial={false}
             animate={{
               opacity: activeIndex === index ? 1 : 0,
-              scale: reducedMotion || index !== 1 || activeIndex === index ? 1 : 1.035,
-              x: reducedMotion || index !== 2 || activeIndex === index ? 0 : -18,
+
             }}
             transition={{ duration: reducedMotion ? 0 : 0.9, ease: "easeInOut" }}
             className="absolute inset-0"
@@ -104,18 +103,18 @@ export function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[#071b2d]/35 lg:bg-[#071b2d]/20" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(5,18,35,0.45),rgba(5,18,35,0.65))] lg:bg-[linear-gradient(90deg,rgba(5,18,35,0.9)_0%,rgba(5,18,35,0.75)_35%,rgba(5,18,35,0.25)_70%,rgba(5,18,35,0.08)_100%)]" />
 
-      <div className="page-container flex min-h-[44rem] items-center pb-32 pt-16 sm:min-h-[48rem] sm:pt-20 lg:min-h-[min(50rem,calc(100svh-5rem))]">
+      <div className="page-container flex min-h-[46rem] items-center pb-28 pt-36 sm:min-h-[50rem] lg:min-h-[min(54rem,100svh)]">
         <div
           data-hero-content
           className="relative w-full max-w-[40rem]"
         >
           <motion.div
             initial={false}
-            animate={reducedMotion ? undefined : { y: [12, 0], opacity: [0.8, 1] }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
           >
-            <h1 id="hero-heading" className="text-[clamp(2.75rem,5.1vw,4.75rem)] font-semibold leading-[1.08] tracking-[-0.045em]">
-              Learn boldly.<br />Grow beyond<br /><span className="text-accent">your limits.</span>
+            <h1 id="hero-heading" className="text-[clamp(3.35rem,6.4vw,6rem)] font-normal leading-[1.02] tracking-[-0.045em]">
+              Learn boldly.<br />Grow beyond<br /><span className="italic text-[#e8d1a5]">your limits.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-on-primary/90 sm:mt-7 sm:text-lg">
               Turn your curiosity into confidence. Explore new ideas, build practical skills, and shape your next chapter with PAP Scholars.
@@ -126,14 +125,13 @@ export function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <Link href="#featured-courses" className="btn btn-primary btn-lg gap-3 shadow-soft">
               Explore courses
-              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
-            <Link href="/courses" className="btn btn-lg border-on-primary/50 bg-on-primary/10 text-on-primary backdrop-blur-md hover:border-on-primary/80 hover:bg-on-primary/20">Find your course</Link>
+            <Link href="/courses" className="btn btn-lg border-transparent text-on-primary hover:bg-on-primary/10">Find your course</Link>
           </div>
           <motion.p
             key={slide.caption}
             initial={false}
-            animate={reducedMotion ? undefined : { x: [activeIndex === 2 ? -8 : 0, 0], opacity: [0.8, 1] }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.55 }}
             className="mt-7 flex min-h-10 items-center gap-2.5 text-sm text-on-primary/85"
           >
@@ -142,7 +140,6 @@ export function Hero() {
         </div>
       </div>
 
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-surface via-surface/40 to-transparent sm:h-24" />
     </section>
   );
 }

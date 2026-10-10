@@ -51,7 +51,7 @@ export function ContactForm() {
       return <div key={field.name} className={`min-w-0 ${field.name === "subject" || field.name === "message" ? "sm:col-span-2" : ""}`}><label htmlFor={id} className="mb-2 block text-sm font-semibold">{field.label} <span className="font-normal text-muted">(required)</span></label>{field.name === "message" ? <textarea {...shared} rows={6} /> : <input {...shared} type={field.name === "email" ? "email" : "text"} autoComplete={field.name === "name" ? "name" : field.name === "email" ? "email" : "off"} autoCapitalize={field.name === "email" ? "none" : undefined} />}{error && <p id={`${id}-error`} role="alert" className="mt-2 text-sm text-[#b12f3a]">{error}</p>}</div>;
     })}</div>
     <p id="contact-demo-note" className="text-xs leading-6 text-muted">This is a demo form. Your message stays on this page and will not be sent or saved.</p>
-    <button type="submit" className="btn btn-primary w-full sm:w-auto">Send message <span aria-hidden="true">→</span></button>
+    <button type="submit" className="btn btn-primary w-full sm:w-auto">Send message </button>
     <div ref={statusRef} tabIndex={-1} role="status" aria-live="polite">{submitted && <p className="rounded-control border border-[#bddcca] bg-[#edf7f0] p-4 text-sm leading-7 text-[#245443]">Thanks for trying the form. Demo submission complete; no message was sent. You can edit the fields to try again.</p>}</div>
   </form>;
 }

@@ -26,3 +26,21 @@
 @media(max-width:420px){.learning-header{padding:0 16px;gap:12px}.learning-header>a:first-child{gap:8px}.learning-header>a:first-child>span:last-child{font-size:15px}.learning-back{font-size:11px}.learning-main{padding-inline:16px}.learning-position{font-size:11px}.learning-position span:first-child{max-width:65%}.learning-button{width:100%}.learning-actions{width:100%}}
 
 .learning-return-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:20px;font-size:12px;color:#405775}.learning-return-nav a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}.learning-return-nav a:hover{text-decoration:underline}.learning-return-nav>span{color:#b2bdcc}
+
+/* The lesson is the primary surface; navigation stays quiet. */
+.learning-shell { background: #fafaf8; }
+.learning-header { position: sticky; top: 0; z-index: 20; height: 80px; }
+.learning-main { padding-top: 24px; }
+.learning-video { border-radius: 4px; box-shadow: none; }
+.learning-description { font-size: 16px; color: #526174; }
+.learning-lesson { padding-block: 36px; }
+.learning-button { border-radius: 4px; font-size: 14px; min-height: 48px; }
+.learning-button:disabled { cursor: default; }
+.learning-sidebar { top: 80px; max-height: calc(100svh - 80px); background: #f4f5f5; }
+.learning-module-heading > span { border: 0; border-radius: 0; }
+.learning-lesson-link { border-radius: 3px; padding-block: 14px; }
+.learning-lesson-link.is-current { border-color: transparent; border-left-color: #2456a6; background: #e9eef5; }
+.learning-module h3 { font-size: 13px; }
+.learning-resources { border: 0; border-radius: 0; background: transparent; border-top: 1px solid #dee5ef; padding: 24px 0; }
+.learning-return-nav > span:last-child { color: #5d6e85; }
+@media (max-width: 800px) { .learning-header { height: 72px; } .learning-sidebar { order: 0; top: auto; max-height: none; } .learning-main { padding-top: 16px; } .learning-course-heading h1 { font-size: 22px; } .learning-video { border-radius: 3px; } .learning-resources { margin-top: 12px; } }

@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient } from "../../lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -29,9 +30,10 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const [shown, setShown] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const [notice, setNotice] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [authError, setAuthError] = useState("");
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (loading) return;
     const form = event.currentTarget;
@@ -44,28 +46,61 @@ export function AuthForm({ mode }: { mode: Mode }) {
       else if (field.name === "password" && mode !== "login" && value.length < 8) nextErrors[field.name] = "Use at least 8 characters for your password.";
       else if (field.name === "confirmPassword" && value !== data.get("password")) nextErrors[field.name] = "Your passwords don’t match. Please try again.";
     });
+    setAuthError("");
     setErrors(nextErrors);
-    setNotice(false);
+    setNotice("");
     const firstError = Object.keys(nextErrors)[0];
     if (firstError) { (form.elements.namedItem(firstError) as HTMLInputElement)?.focus(); return; }
-    if (mode === "login" || mode === "register") {
-      // TEMPORARY DEMO AUTH BYPASS: accept locally validated details without
-      // checking credentials or requiring a session. Replace this branch with
-      // Supabase signInWithPassword/signUp before enabling real authentication.
-      // Passwords are never stored or sent by this demo flow.
-      setLoading(true);
-      router.push("/dashboard");
-      return;
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const emailValue = String(data.get("email") ?? "").trim();
+      const passwordValue = String(data.get("password") ?? "");
+      if (mode === "login") {
+        const { error } = await supabase.auth.signInWithPassword({ email: emailValue, password: passwordValue });
+        if (error) throw error;
+        const requestedNext = new URLSearchParams(window.location.search).get("next");
+        const destination = requestedNext ? new URL(requestedNext, window.location.origin) : null;
+        router.replace(destination?.origin === window.location.origin && destination.pathname.startsWith("/courses/") ? destination.pathname : "/dashboard");
+        router.refresh();
+      } else if (mode === "register") {
+        const fullName = String(data.get("fullName") ?? "").trim();
+        if (fullName.length > 120) throw new Error("Use no more than 120 characters for your name.");
+        const { data: result, error } = await supabase.auth.signUp({
+          email: emailValue, password: passwordValue,
+          options: { data: { full_name: fullName }, emailRedirectTo: `${window.location.origin}/auth/callback` },
+        });
+        if (error) throw error;
+        if (result.session) {
+          router.replace("/dashboard");
+          router.refresh();
+        } else {
+          setNotice("Check your email to confirm your account before logging in.");
+          form.reset();
+        }
+      } else if (mode === "forgot-password") {
+        const { error } = await supabase.auth.resetPasswordForEmail(emailValue, { redirectTo: `${window.location.origin}/auth/callback?next=/reset-password` });
+        if (error) throw error;
+        setNotice("If an account exists for this email, you’ll receive a password reset link.");
+      } else {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) throw new Error("Open the password reset link from your email before setting a new password.");
+        const { error } = await supabase.auth.updateUser({ password: passwordValue });
+        if (error) throw error;
+        setNotice("Your password has been updated. You can continue to your dashboard.");
+      }
+    } catch (error) {
+      setAuthError(error instanceof Error ? error.message : "Unable to connect. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    // Preserve recovery screens until Supabase password recovery is connected.
-    setNotice(true);
   }
 
   return (
-    <motion.div className="w-full max-w-[27rem]" initial={false} animate={reducedMotion ? undefined : { opacity: [0, 1], y: [12, 0] }} transition={{ duration: 0.35 }}>
+    <motion.div className="w-full max-w-[27rem]" initial={false} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
       <div className="mb-8">
         <div className="mb-5 flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] text-primary"><span aria-hidden="true" className="size-1.5 rounded-full bg-[#326e60]" />{screen.eyebrow}</div>
-        <h1 className="text-[clamp(1.9rem,4vw,2.5rem)] leading-tight">{screen.title}</h1>
+        <h1 className="editorial-title text-[clamp(2.2rem,4vw,3rem)] leading-tight">{screen.title}</h1>
         <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{screen.description}</p>
       </div>
       <form noValidate onSubmit={submit} aria-busy={loading} className="space-y-5">
@@ -75,22 +110,23 @@ export function AuthForm({ mode }: { mode: Mode }) {
           return <div key={field.name}>
             <label htmlFor={id} className="mb-2 block text-sm font-semibold">{field.label}</label>
             <div className="relative">
-              <input id={id} name={field.name} type={field.type === "password" && shown[field.name] ? "text" : field.type} autoComplete={field.autoComplete} placeholder={field.placeholder} required disabled={loading} spellCheck={field.type === "text"} autoCapitalize={field.type === "email" ? "none" : undefined} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : field.hint ? `${id}-hint` : undefined} onChange={() => { setErrors(previous => ({ ...previous, [field.name]: "" })); setNotice(false); }} className={`auth-input ${field.type === "password" ? "pr-14" : ""}`} />
+              <input id={id} name={field.name} type={field.type === "password" && shown[field.name] ? "text" : field.type} autoComplete={field.autoComplete} placeholder={field.placeholder} required disabled={loading} spellCheck={field.type === "text"} autoCapitalize={field.type === "email" ? "none" : undefined} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : field.hint ? `${id}-hint` : undefined} onChange={() => { setErrors(previous => ({ ...previous, [field.name]: "" })); setNotice(""); }} className={`auth-input ${field.type === "password" ? "pr-14" : ""}`} />
               {field.type === "password" && <button type="button" disabled={loading} onClick={() => setShown(previous => ({ ...previous, [field.name]: !previous[field.name] }))} aria-label={`${shown[field.name] ? "Hide" : "Show"} ${field.label.toLowerCase()}`} aria-pressed={!!shown[field.name]} className="absolute inset-y-1 right-1 flex w-11 items-center justify-center rounded-lg text-muted transition-colors hover:bg-surface-muted hover:text-primary"><Eye visible={!!shown[field.name]} /></button>}
             </div>
             {field.hint && !error && <p id={`${id}-hint`} className="mt-2 text-xs text-muted">{field.hint}</p>}
             {error && <p id={`${id}-error`} role="alert" className="mt-2 text-xs font-medium text-[#b12f3a]">{error}</p>}
           </div>;
         })}
-        {mode === "login" && <div className="flex flex-wrap items-center justify-between gap-3 text-sm"><label className="inline-flex min-h-11 cursor-pointer items-center gap-2.5 text-muted"><input type="checkbox" name="remember" disabled={loading} className="size-4 accent-primary" />Remember me</label><Link href="/forgot-password" className="auth-link inline-flex min-h-11 items-center">Forgot password?</Link></div>}
+        {mode === "login" && <div className="flex justify-end text-sm"><Link href="/forgot-password" className="auth-link inline-flex min-h-11 items-center">Forgot password?</Link></div>}
+        {authError && <p role="alert" className="text-sm text-[#b12f3a]">{authError}</p>}
         <button type="submit" disabled={loading} className="btn btn-primary min-h-[3.25rem] w-full shadow-[0_4px_12px_rgba(36,86,166,0.15)]">
           {loading && <svg className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" opacity="0.25" /><path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>}
-          {loading ? screen.loading : screen.button}{!loading && <span aria-hidden="true">→</span>}
+          {loading ? screen.loading : screen.button}
         </button>
-        <AnimatePresence>{notice && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 0.15 }} role="status" className="rounded-control border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-6 text-primary">Password recovery is not connected yet. No reset email was sent and no password was changed.</motion.div>}</AnimatePresence>
+        <AnimatePresence>{notice && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 0.15 }} role="status" className="rounded-control border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-6 text-primary">{notice}</motion.div>}</AnimatePresence>
       </form>
-      <div className="mt-7 border-t border-border pt-6 text-center text-sm text-muted">
-        {mode === "login" ? <>New to PAP Scholars? <Link href="/register" className="auth-link">Create an account</Link></> : mode === "register" ? <>Already have an account? <Link href="/login" className="auth-link">Log in</Link></> : <Link href="/login" className="auth-link inline-flex min-h-11 items-center gap-2"><span aria-hidden="true">←</span> Back to login</Link>}
+      <div className="mt-7 border-t border-border pt-6 text-sm text-muted">
+        {mode === "login" ? <>New to PAP Scholars? <Link href="/register" className="auth-link">Create an account</Link></> : mode === "register" ? <>Already have an account? <Link href="/login" className="auth-link">Log in</Link></> : <Link href="/login" className="auth-link inline-flex min-h-11 items-center gap-2"> Back to login</Link>}
       </div>
     </motion.div>
   );

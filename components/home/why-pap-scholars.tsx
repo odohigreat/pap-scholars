@@ -10,7 +10,7 @@ export function WhyPapScholars() {
         <Reveal className="mb-12 border-b border-border pb-8 sm:mb-16 sm:pb-10">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Why PAP Scholars</p>
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-20">
-            <h2 id="why-heading" className="max-w-2xl text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-[1.12] tracking-[-0.035em] text-foreground">Learning that<br />stays with you.</h2>
+            <h2 id="why-heading" className="max-w-2xl text-[clamp(2.25rem,4vw,3.5rem)] font-normal leading-[1.12] tracking-[-0.035em] text-foreground">Learning that<br />stays with you.</h2>
             <p className="max-w-md text-base leading-relaxed text-muted">Good learning reaches beyond a lesson. It shapes how you study, make decisions, and contribute to the world around you.</p>
           </div>
         </Reveal>

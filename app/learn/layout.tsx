@@ -1,7 +1,11 @@
+import { redirect } from "next/navigation";
+import { createClient } from "../../lib/supabase/server";
 import type { ReactNode } from "react";
-import { LearningProgressProvider } from "../../components/learn/learning-progress";
 import "./learning.css";
 
-export default function LearningLayout({ children }: { children: ReactNode }) {
-  return <LearningProgressProvider>{children}</LearningProgressProvider>;
+export default async function LearningLayout({ children }: { children: ReactNode }) {
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) redirect("/login");
+  return <>{children}</>;
 }

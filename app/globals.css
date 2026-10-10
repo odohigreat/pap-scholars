@@ -3,23 +3,25 @@
 /* Change brand tokens here; semantic utilities and button variants follow them. */
 :root {
   color-scheme: light;
-  --brand-primary: #244c43;
-  --brand-primary-hover: #19392f;
+  --brand-primary: #2456a6;
+  --brand-primary-hover: #1b4385;
   --brand-accent: #d5af68;
   --brand-on-primary: #ffffff;
-  --background: #f8f9f6;
+  --background: #f7f7f4;
   --surface: #ffffff;
-  --surface-muted: #eef2ed;
-  --foreground: #172820;
-  --muted: #59665e;
-  --border: #d5ddd5;
-  --focus: #326e60;
-  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --surface-muted: #f0f2f5;
+  --foreground: #18283f;
+  --muted: #5d6877;
+  --border: #dfe3e7;
+  --focus: #2456a6;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   --font-heading: var(--font-body);
-  --page-width: 75rem;
+  --font-editorial: Georgia, "Times New Roman", serif;
+  --support-green: #326e60;
+  --page-width: 80rem;
   --reading-width: 45rem;
   --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --section-space: clamp(3rem, 7vw, 6rem);
+  --section-space: clamp(4rem, 8vw, 7.5rem);
 }
 
 @theme inline {
@@ -41,9 +43,9 @@
 }
 
 @theme {
-  --radius-control: 0.75rem;
-  --radius-card: 1.25rem;
-  --shadow-soft: 0 8px 32px rgb(23 40 32 / 0.06);
+  --radius-control: 0.375rem;
+  --radius-card: 0.5rem;
+  --shadow-soft: 0 8px 32px rgb(24 40 63 / 0.05);
 }
 
 @layer base {
@@ -160,4 +162,69 @@
   @media (prefers-reduced-motion: reduce) {
     .btn { transition: none; }
   }
+}
+
+/* Shared editorial language for public pages. Application headings stay sans-serif. */
+@layer components {
+  .marketing-shell h1, .marketing-shell h2, .editorial-title {
+    font-family: var(--font-editorial);
+    font-weight: 400;
+    letter-spacing: -.045em;
+  }
+  .marketing-shell h3 { letter-spacing: -.025em; }
+  .marketing-shell { background: var(--background); }
+  .course-tile { display: flex; height: 100%; min-width: 0; flex-direction: column; }
+  .course-tile-image { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--surface-muted); }
+  .course-tile-content { display: flex; flex: 1; flex-direction: column; padding-top: 1.5rem; }
+  .course-tile-title { font-size: 1.375rem; line-height: 1.35; transition: color 160ms ease; }
+  .course-tile:hover .course-tile-title { color: var(--brand-primary); }
+  .course-tile-meta { margin-top: auto; padding-top: 1.5rem; }
+  .course-tile-link { display: flex; min-height: 2.75rem; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); margin-top: 1rem; font-size: .875rem; font-weight: 600; color: var(--brand-primary); }
+  .course-collection { display: grid; gap: 3.5rem 2.5rem; }
+  .journal-index { display: grid; gap: 2.5rem; }
+  .journal-index > div { border-top: 1px solid var(--border); padding-top: 1.75rem; }
+  .journal-index article:not(.journal-feature) { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1fr); gap: 1.5rem; }
+  .journal-index article > div { padding-top: 0; }
+  .journal-index article > a { aspect-ratio: 4/5; }
+  .journal-feature h3 { font-family: var(--font-editorial); font-weight: 400; letter-spacing: -.04em; }
+  .article-reading { font-family: var(--font-editorial); font-size: 1.125rem; }
+  .article-reading h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 600; letter-spacing: -.025em; }
+  .article-reading p { line-height: 1.9; }
+  .article-reading > p:first-child::first-letter { float: left; padding: .12em .13em 0 0; font-size: 3.75rem; line-height: .85; color: var(--foreground); }
+  .course-outcomes { margin-top: 3rem; border-block: 1px solid var(--border); padding-block: 2rem; }
+  .course-detail #curriculum details { border-radius: 0; border-inline: 0; background: transparent; }
+  .course-detail #curriculum summary { padding-inline: 0; }
+  .course-detail #curriculum details ol { margin-inline: 0; }
+  .course-detail #curriculum > .space-y-4 { display: grid; gap: 0; }
+  .course-information { border-top: 3px solid var(--brand-primary); background: var(--surface); padding: 1.75rem; }
+  .course-instructor { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .site-footer { background: #eff1f2; }
+  .site-footer-top { display: grid; gap: 2.5rem; padding-block: 4rem; }
+  .site-footer nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  .page-intro { padding-block: clamp(3.5rem, 7vw, 6rem); }
+  @media (min-width: 640px) { .course-collection { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) {
+    .course-collection { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .home-course-collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.5rem 3rem; }
+    .home-course-collection .course-tile { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: 1.5rem; }
+    .home-course-collection .course-tile-image { aspect-ratio: 4/5; }
+    .home-course-collection .course-tile-content { padding-top: 0; }
+    .journal-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
+    .site-footer-top { grid-template-columns: 1.5fr 1fr; gap: 5rem; }
+  }
+  @media (max-width: 479px) {
+    .journal-index article:not(.journal-feature) { grid-template-columns: minmax(0, 1fr); }
+    .journal-index article > a { aspect-ratio: 16/10; }
+  }
+  @media (prefers-reduced-motion: reduce) { .course-tile-title { transition: none; } }
+}
+
+@layer components {
+  .journal-support article { display: grid; grid-template-columns: minmax(0, .65fr) minmax(0, 1fr); gap: 1.25rem; }
+  .journal-support article > a { aspect-ratio: 4/5; }
+  .journal-support article > div { padding-top: 0; }
+  .journal-support article h3 { font-size: 1.125rem; }
+  .journal-support article p { margin-top: .75rem; }
+  @media (min-width: 640px) and (max-width: 1023px) { .journal-support article { display: flex; } .journal-support article > a { aspect-ratio: 16/10; } .journal-support article > div { padding-top: 1.25rem; } }
+  @media (max-width: 479px) { .journal-support article { grid-template-columns: minmax(0, .6fr) minmax(0, 1fr); gap: 1rem; } }
 }
