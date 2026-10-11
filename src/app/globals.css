@@ -1,0 +1,473 @@
+@import "tailwindcss";
+
+/* Change brand tokens here; semantic utilities and button variants follow them. */
+:root {
+  color-scheme: light;
+  --brand-primary: #2456a6;
+  --brand-primary-hover: #1b4385;
+  --brand-accent: #d5af68;
+  --brand-on-primary: #ffffff;
+  --background: #f7f7f4;
+  --surface: #ffffff;
+  --surface-muted: #f0f2f5;
+  --foreground: #18283f;
+  --muted: #5d6877;
+  --border: #dfe3e7;
+  --focus: #2456a6;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-heading: var(--font-body);
+  --font-editorial: Georgia, "Times New Roman", serif;
+  --support-green: #326e60;
+  --page-width: 80rem;
+  --reading-width: 45rem;
+  --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --section-space: clamp(4rem, 8vw, 7.5rem);
+}
+
+@theme inline {
+  --color-primary: var(--brand-primary);
+  --color-primary-hover: var(--brand-primary-hover);
+  --color-on-primary: var(--brand-on-primary);
+  --color-accent: var(--brand-accent);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-focus: var(--focus);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --spacing-gutter: var(--page-gutter);
+  --spacing-section: var(--section-space);
+}
+
+@theme {
+  --radius-control: 0.25rem;
+  --radius-card: 0.75rem;
+  --shadow-soft: 0 8px 32px rgb(24 40 63 / 0.05);
+}
+
+@layer base {
+  body {
+    min-height: 100svh;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+  h2 { font-size: clamp(2rem, 3.5vw, 3rem); }
+  h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  ::selection {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+}
+
+/* Use alongside Tailwind's standard spacing scale and responsive modifiers. */
+@utility page-container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+@utility reading-container {
+  width: 100%;
+  max-width: var(--reading-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+@utility section-spacing {
+  padding-block: var(--section-space);
+}
+
+@utility text-lead {
+  font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+@layer components {
+  /* Combine .btn with a variant and optional size, e.g. btn btn-primary btn-sm. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .btn-primary {
+    background: var(--brand-primary);
+    color: var(--brand-on-primary);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--brand-primary);
+  }
+
+  @media (hover: hover) {
+    .btn-primary:hover { background: var(--brand-primary-hover); }
+    .btn-secondary:hover, .btn-ghost:hover { background: var(--surface-muted); }
+  }
+
+  .btn-sm { padding: 0.625rem 1rem; font-size: 0.875rem; }
+  .btn-lg { min-height: 3.25rem; padding: 1rem 1.5rem; font-size: 1rem; }
+
+  .btn:disabled, .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+}
+
+/* Shared institutional typography and layouts for public pages. */
+@layer components {
+  .marketing-shell h1, .marketing-shell h2, .editorial-title {
+    font-family: var(--font-heading);
+    font-weight: 650;
+    letter-spacing: -.04em;
+  }
+  .marketing-shell h3 { letter-spacing: -.025em; }
+  .marketing-shell { background: var(--background); }
+  .course-tile { display: flex; height: 100%; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .course-tile:hover { border-color: #b7c8df; box-shadow: 0 12px 30px rgb(24 40 63 / 8%); }
+  .course-tile-image img { transition: transform 400ms ease; }
+  @media (hover: hover) { .course-tile:hover .course-tile-image img { transform: scale(1.035); } }
+  .course-tile-image { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--surface-muted); }
+  .course-tile-content { display: flex; flex: 1; flex-direction: column; padding: 1.5rem; }
+  .course-tile-title { font-size: 1.375rem; line-height: 1.35; transition: color 160ms ease; }
+  .course-tile:hover .course-tile-title { color: var(--brand-primary); }
+  .course-tile-meta { margin-top: auto; padding-top: 1.5rem; }
+  .course-tile-link { display: flex; min-height: 2.75rem; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); margin-top: 1rem; font-size: .875rem; font-weight: 600; color: var(--brand-primary); }
+  .course-collection { display: grid; gap: 1.75rem; }
+  .journal-index { display: grid; gap: 2.5rem; }
+  .journal-index > div { border-top: 1px solid var(--border); padding-top: 1.75rem; }
+  .journal-index article:not(.journal-feature) { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1fr); gap: 1.5rem; }
+  .journal-index article > div:not(.journal-card-image) { padding-top: 0; }
+  .journal-index article > .journal-card-image { aspect-ratio: 4/5; }
+  .journal-feature h3 { font-family: var(--font-heading); font-weight: 650; letter-spacing: -.04em; }
+  .article-reading { font-family: var(--font-editorial); font-size: 1.125rem; }
+  .article-reading h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 600; letter-spacing: -.025em; }
+  .article-reading p { line-height: 1.9; }
+  .article-reading > p:first-child::first-letter { float: left; padding: .12em .13em 0 0; font-size: 3.75rem; line-height: .85; color: var(--foreground); }
+  .course-outcomes { margin-top: 3rem; border-block: 1px solid var(--border); padding-block: 2rem; }
+  .course-detail #curriculum details { border-radius: 0; border-inline: 0; background: transparent; }
+  .course-detail #curriculum summary { padding-inline: 0; }
+  .course-detail #curriculum details ol { margin-inline: 0; }
+  .course-detail #curriculum > .space-y-4 { display: grid; gap: 0; }
+  .course-information { border: 1px solid var(--border); border-top: 4px solid var(--brand-primary); border-radius: .5rem; background: var(--surface); padding: 1.75rem; box-shadow: 0 8px 28px rgb(24 40 63 / 5%); }
+  .course-instructor { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .site-footer { background: #10233e; color: white; --foreground: #ffffff; --muted: #c1cbda; --brand-primary: #e8c98e; --border: #31435c; }
+  .site-footer-top { display: grid; gap: 2.5rem; padding-block: 4rem; }
+  .site-footer nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  .page-intro { padding-block: clamp(3.5rem, 7vw, 6rem); }
+  @media (min-width: 640px) { .course-collection { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) {
+    .course-collection { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .journal-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
+    .site-footer-top { grid-template-columns: 1.5fr 1fr; gap: 5rem; }
+  }
+    .home-course-collection {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: min(85%, 22rem);
+      gap: 1rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: .25rem;
+      scroll-behavior: smooth;
+      padding: .25rem .25rem 1rem;
+      scrollbar-width: none;
+    }
+    .home-course-collection .course-tile { scroll-snap-align: start; scroll-snap-stop: always; }
+    .home-course-collection::-webkit-scrollbar { display: none; }
+  @media (max-width: 479px) {
+    .journal-index article:not(.journal-feature) { grid-template-columns: minmax(0, 1fr); }
+    .journal-index article > .journal-card-image { aspect-ratio: 16/10; }
+  }
+  @media (prefers-reduced-motion: reduce) { .course-tile, .course-tile-title, .course-tile-image img { transition: none; } .course-tile:hover .course-tile-image img { transform: none; } }
+}
+
+@layer components {
+  .journal-support article { display: grid; grid-template-columns: minmax(0, .65fr) minmax(0, 1fr); gap: 1.25rem; }
+  .journal-support article > .journal-card-image { aspect-ratio: 4/5; }
+  .journal-support article > div:not(.journal-card-image) { padding-top: 0; }
+  .journal-support article h3 { font-size: 1.125rem; }
+  .journal-support article p { margin-top: .75rem; }
+  @media (min-width: 640px) and (max-width: 1023px) { .journal-support article { display: flex; } .journal-support article > .journal-card-image { aspect-ratio: 16/10; } .journal-support article > div:not(.journal-card-image) { padding-top: 1.25rem; } }
+  @media (max-width: 479px) { .journal-support article { grid-template-columns: minmax(0, .6fr) minmax(0, 1fr); gap: 1rem; } }
+}
+
+@layer components {
+  .institution-header-frame { position: absolute; top: 0; left: 0; right: 0; margin-inline: auto; width: 100%; border: 1px solid transparent; border-bottom-color: var(--border); background: rgb(255 255 255 / 96%); box-shadow: 0 2px 16px rgb(16 35 62 / 5%); transition: width 250ms ease, border-radius 250ms ease, transform 250ms ease, box-shadow 250ms ease; backdrop-filter: blur(16px); }
+  .institution-header.is-floating .institution-header-frame { width: min(calc(100% - 24px), 1280px); border-color: var(--border); border-radius: 22px; transform: translateY(12px); box-shadow: 0 8px 24px rgb(24 40 63 / 10%); }
+  .institution-header-frame #mobile-navigation { border-radius: 0 0 22px 22px; max-height: calc(100dvh - 7rem); }
+  @media (prefers-reduced-motion: reduce) { .institution-header-frame { transition: none; } }
+  .institution-nav-link { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .8rem .9rem; font-size: .875rem; font-weight: 600; color: var(--foreground); border-bottom: 2px solid transparent; }
+  .institution-nav-link:hover, .institution-nav-link[aria-current="page"] { color: var(--brand-primary); border-bottom-color: var(--brand-accent); }
+  .marketing-shell .page-intro { position: relative; }
+  .marketing-shell .page-intro::before { content: ""; position: absolute; top: 2rem; left: var(--page-gutter); width: 3rem; height: 3px; background: var(--brand-accent); }
+  @media (max-width: 639px) {
+    .institution-header .page-container > a { gap: .5rem; }
+    .institution-header .page-container > a img { width: 2rem; height: 2rem; }
+    .institution-header .page-container > a > span:last-child { font-size: .95rem; }
+    .institution-header .page-container > a > span:first-child { gap: .25rem; }
+  }
+  .institution-hero h1 { color: white; font-weight: 650; }
+  .learning-benefits { border-block: 1px solid var(--border); background: #f0f4f9; }
+  .learning-benefits-grid { display: grid; gap: 0; }
+  .learning-benefit { position: relative; padding: 1.5rem 0; display: flex; gap: 1rem; align-items: flex-start; }
+  .learning-benefit + .learning-benefit { border-top: 1px solid var(--border); }
+  .learning-benefit-number { position: relative; z-index: 1; display: flex; flex-shrink: 0; width: 2.5rem; height: 2.5rem; align-items: center; justify-content: center; border: 1px solid #cad7e8; border-radius: 50%; background: white; font-size: .8rem; font-weight: 700; color: var(--brand-primary); transition: background-color 220ms ease, color 220ms ease, transform 220ms ease; }
+  @media (hover: hover) {
+    .learning-benefit:hover .learning-benefit-number { background: var(--brand-primary); color: white; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .learning-benefit-number { transition: none; }
+    .learning-benefit:hover .learning-benefit-number { transform: none; }
+  }
+  @media (min-width: 768px) {
+    .learning-benefits-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .learning-benefit { padding: 2rem 1.5rem; }
+    .learning-benefit { flex-direction: column; gap: 1.25rem; }
+    .learning-benefit + .learning-benefit { border-top: 0; border-left: 1px solid var(--border); }
+  }
+}
+
+@layer components {
+  .learning-benefit-ring { position: absolute; inset: -2px; width: calc(100% + 4px); height: calc(100% + 4px); transform: rotate(-90deg); overflow: visible; pointer-events: none; }
+  .learning-benefit-connector { position: absolute; top: 4rem; bottom: -1.5rem; left: 1.25rem; width: 2px; background: #cad7e8; pointer-events: none; }
+  .learning-benefit-line { position: absolute; inset: 0; background: var(--brand-primary); transform: scaleY(var(--line-progress, 0)); transform-origin: top; }
+  @media (min-width: 768px) {
+    .learning-benefit-connector { top: 3.25rem; bottom: auto; left: 4rem; right: -1.5rem; width: auto; height: 2px; }
+    .learning-benefit-line { transform: scaleX(var(--line-progress, 0)); transform-origin: left; }
+  }
+  @media (prefers-reduced-motion: reduce) { .learning-benefit-line { transform: none; } }
+}
+
+@layer components {
+  .featured-course-card { border-radius: .875rem; box-shadow: 0 4px 18px rgb(24 40 63 / 4%); }
+  .featured-course-card .course-tile-image { aspect-ratio: 16/9; }
+  .featured-course-card .course-tile-content { padding: 1.5rem; }
+  .featured-course-card .course-tile-content > p:first-child { align-self: flex-start; border-radius: 999px; padding: .35rem .65rem; background: #eef3fa; color: var(--brand-primary); font-size: .65rem; }
+  .featured-course-card .course-tile-title { font-size: 1.3rem; line-height: 1.4; }
+  @media (prefers-reduced-motion: reduce) { .home-course-collection { scroll-behavior: auto; } }
+}
+
+@layer components {
+  .course-carousel-control {
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd8e9;
+    border-radius: 50%;
+    background: white;
+    color: var(--brand-primary);
+    box-shadow: 0 3px 10px rgb(24 40 63 / 6%);
+    cursor: pointer;
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  }
+  .course-carousel-control-next { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+  .course-carousel-control:active:not(:disabled) { transform: scale(.93); }
+  .course-carousel-control:disabled { opacity: .35; box-shadow: none; cursor: default; }
+  @media (hover: hover) {
+    .course-carousel-control:hover:not(:disabled) { background: #eaf1fc; box-shadow: 0 5px 14px rgb(24 40 63 / 12%); }
+    .course-carousel-control-next:hover:not(:disabled) { background: var(--brand-primary-hover); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .course-carousel-control { transition: none; }
+    .course-carousel-control:active:not(:disabled) { transform: none; }
+  }
+}
+
+@layer components {
+  .home-journal-collection > article { overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; border: 1px solid var(--border); border-radius: .875rem; background: white; box-shadow: 0 4px 18px rgb(24 40 63 / 4%); }
+  .home-journal-collection > article > .journal-card-image { aspect-ratio: 16/9; }
+  .home-journal-collection > article > div:not(.journal-card-image) { padding: 1.5rem; }
+  .home-journal-collection article h3 { font-size: 1.3rem; line-height: 1.4; }
+  .home-journal-collection article > div > p:first-child { align-self: flex-start; border-radius: 999px; padding: .35rem .65rem; background: #eef3fa; color: var(--brand-primary); font-size: .65rem; }
+}
+
+@layer components {
+  .journal-read-button {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    padding: .8rem 1.5rem;
+    border: 1px solid var(--brand-primary);
+    border-radius: .5rem;
+    background: var(--brand-primary);
+    color: white;
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgb(36 86 166 / 12%);
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  }
+  .home-journal-collection .journal-read-button, .featured-course-button { display: flex; width: 100%; }
+  @media (hover: hover) { .featured-course-card:hover .featured-course-button { background: var(--brand-primary-hover); box-shadow: 0 6px 16px rgb(36 86 166 / 20%); } }
+  .journal-read-button:active { transform: scale(.98); }
+  @media (hover: hover) {
+    .journal-read-button:hover { background: var(--brand-primary-hover); box-shadow: 0 6px 16px rgb(36 86 166 / 20%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .journal-read-button { transition: none; }
+    .journal-read-button:active { transform: none; }
+  }
+}
+
+@layer components {
+  .featured-course-card, .home-journal-collection > article {
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+  .featured-course-card:focus-within,
+  .home-journal-collection > article:focus-within {
+    border-color: var(--brand-primary);
+    box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 2px rgb(36 86 166 / 15%), 0 0 20px rgb(36 86 166 / 18%);
+  }
+  @media (hover: hover) {
+    .featured-course-card:hover, .home-journal-collection > article:hover {
+      border-color: var(--brand-primary);
+      box-shadow: inset 0 0 0 1px var(--brand-primary), 0 0 0 2px rgb(36 86 166 / 15%), 0 0 20px rgb(36 86 166 / 18%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .featured-course-card, .home-journal-collection > article { transition: none; }
+  }
+}
+
+@layer components {
+  .about-figure { position: relative; padding-bottom: 2rem; }
+  .about-image-caption { position: relative; margin: -3.5rem 1rem 0; padding: 1.5rem; border-left: 3px solid var(--brand-accent); border-radius: .5rem; background: #18283f; color: white; box-shadow: 0 8px 24px rgb(24 40 63 / 12%); }
+  .about-purpose-panel { padding: clamp(1.5rem, 3vw, 2.5rem); border: 1px solid var(--border); border-radius: .75rem; background: white; }
+  .about-section-number { font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-primary); }
+  .about-vision-panel { background: #18283f; color: white; border-color: #18283f; }
+  .about-vision-panel .about-section-number { color: #e8c98e; }
+  .about-vision-panel p { color: #d4deed; }
+  .about-focus-card { display: flex; flex-direction: column; min-width: 0; padding: 1.75rem; border: 1px solid var(--border); border-radius: .75rem; background: #f7f9fc; }
+  .about-focus-number { display: inline-flex; width: 2.75rem; height: 2.75rem; align-items: center; justify-content: center; border: 1px solid #cad7e8; border-radius: 50%; background: white; color: var(--brand-primary); font-size: .8rem; font-weight: 600; }
+}
+
+@layer components {
+  .catalogue-toolbar { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: .75rem; background: white; }
+  .catalogue-input { display: block; width: 100%; min-height: 3rem; padding: .75rem 1rem; border: 1px solid #cad7e8; border-radius: .375rem; background: #f7f9fc; color: var(--foreground); font-size: .9375rem; }
+  .catalogue-input::placeholder { color: var(--muted); }
+  .catalogue-enrollment-badge { position: absolute; z-index: 1; top: 1rem; left: 1rem; padding: .4rem .75rem; border-radius: 999px; background: white; color: var(--brand-primary); font-size: .7rem; font-weight: 600; box-shadow: 0 2px 8px rgb(24 40 63 / 12%); }
+  @media (min-width: 640px) { .catalogue-toolbar { flex-direction: row; align-items: flex-end; } }
+}
+
+@layer components {
+  .catalogue-hero { background: #eef3fa; }
+  .catalogue-hero-caption { position: relative; margin: -3rem 1rem 0; padding: 1.5rem; border-left: 3px solid var(--brand-accent); border-radius: .5rem; background: #18283f; color: white; box-shadow: 0 8px 20px rgb(24 40 63 / 10%); }
+  .catalogue-topic { flex-shrink: 0; min-height: 2.75rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 999px; background: white; font-size: .8rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .catalogue-topic[aria-pressed="true"] { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+  .catalogue-card-progress { display: block; width: 100%; height: .4rem; border: 0; border-radius: 999px; overflow: hidden; background: #e2eaf5; color: var(--brand-primary); }
+  .catalogue-card-progress::-webkit-progress-bar { background: #e2eaf5; border-radius: 999px; }
+  .catalogue-card-progress::-webkit-progress-value { background: var(--brand-primary); border-radius: 999px; }
+  .catalogue-card-progress::-moz-progress-bar { background: var(--brand-primary); border-radius: 999px; }
+}
+
+@layer components {
+  .journal-page-hero { background: #18283f; color: white; border-bottom: 4px solid var(--brand-accent); }
+  .journal-editor-pick { overflow: hidden; border: 1px solid var(--border); border-radius: .875rem; background: white; box-shadow: 0 6px 24px rgb(24 40 63 / 5%); }
+  .journal-editor-pick article { gap: 0; }
+  .journal-editor-pick article > div:not(.journal-card-image) { padding: 1.75rem; }
+  .journal-editor-pick article h3 { font-size: clamp(1.75rem, 3vw, 2.75rem); font-weight: 600; }
+  .journal-library-grid { display: grid; gap: 1.5rem; }
+  .journal-library-card { overflow: hidden; border: 1px solid var(--border); border-radius: .875rem; background: white; box-shadow: 0 4px 18px rgb(24 40 63 / 4%); }
+  .journal-library-card article > .journal-card-image { aspect-ratio: 16/9; }
+  .journal-library-card article > div:not(.journal-card-image) { padding: 1.5rem; }
+  .journal-library-card .journal-read-button { display: flex; width: 100%; }
+  .journal-library-card article > div > p:first-child { align-self: flex-start; padding: .35rem .65rem; border-radius: 999px; background: #eef3fa; color: var(--brand-primary); font-size: .65rem; }
+  @media (min-width: 640px) { .journal-library-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .journal-library-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .journal-editor-pick article > div:not(.journal-card-image) { padding: 2.5rem; } }
+}
+
+@layer components {
+  .journal-feature-story { display: grid; overflow: hidden; border-radius: 1rem; background: #18283f; color: white; box-shadow: 0 12px 32px rgb(24 40 63 / 10%); }
+  .journal-feature-label { position: absolute; top: 1.25rem; left: 1.25rem; padding: .5rem .85rem; border-radius: 999px; background: white; color: var(--brand-primary); font-size: .7rem; font-weight: 600; }
+  .journal-search-toolbar { border-top: 3px solid var(--brand-primary); box-shadow: 0 3px 14px rgb(24 40 63 / 4%); }
+  .journal-topic { display: inline-flex; align-items: center; gap: .65rem; }
+  .journal-topic-count { display: inline-flex; min-width: 1.5rem; height: 1.5rem; align-items: center; justify-content: center; border-radius: 50%; background: #eef3fa; font-size: .65rem; color: var(--brand-primary); }
+  .journal-topic[aria-pressed="true"] .journal-topic-count { background: rgb(255 255 255 / 20%); color: white; }
+  .journal-library-card { transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .journal-library-card:focus-within { border-color: var(--brand-primary); box-shadow: 0 0 0 2px rgb(36 86 166 / 15%), 0 0 20px rgb(36 86 166 / 12%); }
+  .journal-library-card article h3 { font-size: 1.3rem; line-height: 1.4; }
+  @media (hover: hover) { .journal-library-card:hover { border-color: var(--brand-primary); box-shadow: 0 0 0 2px rgb(36 86 166 / 15%), 0 0 20px rgb(36 86 166 / 12%); } }
+  @media (min-width: 1024px) { .journal-feature-story { grid-template-columns: 1.15fr 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .journal-library-card { transition: none; } }
+}
+
+/* Course detail and journal reading layouts. */
+@layer components {
+  .course-detail-hero { background: #18283f; border-bottom: 4px solid #d5af68; }
+  .course-detail-tag { border: 1px solid rgb(255 255 255 / 22%); border-radius: 999px; padding: .55rem .85rem; }
+  .course-detail .course-information { border-top-color: #d5af68; border-radius: .875rem; padding: 1.75rem; }
+  .course-detail .course-instructor { padding: 1.5rem; border: 1px solid var(--border); border-radius: .875rem; background: white; }
+  .course-detail #curriculum > .space-y-4 { gap: .875rem; }
+  .course-detail #curriculum details { border: 1px solid var(--border); border-radius: .75rem; background: white; overflow: hidden; }
+  .course-detail #curriculum summary { padding: 1.25rem; }
+  .course-detail #curriculum details[open] summary { background: #eef3fa; }
+  .course-detail #curriculum details ol { margin: 0 1.25rem 1rem; }
+  .article-masthead { background: #f0f3f7; border-top: 1px solid var(--border); }
+  .journal-article-page > article > .page-container { padding-top: 2rem; }
+  .article-layout { display: grid; gap: 2rem; padding-block: 3rem; }
+  .article-contents { border-block: 1px solid var(--border); padding-block: 1.5rem; }
+  .journal-article-page .article-reading { width: 100%; max-width: 44rem; }
+  .journal-article-page .article-reading > p:first-child { font-size: 1.3rem; line-height: 1.8; }
+  .journal-article-page .article-reading > p:first-child::first-letter { float: none; padding: 0; font-size: inherit; line-height: inherit; }
+  .journal-article-page .article-reading h2 { font-size: clamp(1.5rem, 2.5vw, 1.85rem); }
+  @media (min-width: 1024px) {
+    .article-layout { grid-template-columns: 14rem minmax(0, 44rem); justify-content: center; gap: 4rem; padding-block: 4rem; align-items: start; }
+    .article-contents { position: sticky; top: 8rem; }
+  }
+}

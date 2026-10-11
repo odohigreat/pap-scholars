@@ -16,7 +16,7 @@ try {
     grant usage on schema auth to authenticated;
     grant execute on function auth.uid() to authenticated;
   `);
-  for (const file of ['202610100001_initial_schema.sql', '202610100002_enrollment_tracking.sql']) {
+  for (const file of ['202610100001_initial_schema.sql', '202610100002_enrollment_tracking.sql', '202610110001_catalogue_progress.sql']) {
     await db.exec(await readFile(new URL(`../supabase/migrations/${file}`, import.meta.url), 'utf8'));
     if (file === '202610100001_initial_schema.sql' && process.env.PAP_TEST_EXISTING_ID === '1') {
       // Reproduce the hosted database's already-existing ID column.
@@ -71,5 +71,26 @@ try {
     assert.deepEqual(afterRerun[field], beforeRerun[field], `rerun preserves ${field}`);
   }
   assert.equal((await asUser(bob, 'select * from public.enrollments')).rows.length, 0, 'rerun preserves RLS');
-  console.log('PASS: existing ID and migration rerun compatibility; both migrations, duplicates, own-row RLS, restricted updates, lesson FK, start/resume, completion and review.');
+  // Curriculum changes must update previously completed enrolments.
+  await db.exec(`insert into public.lessons(course_id,id,module_id,title,duration_minutes,position)
+    values ('${course}', 'new-lesson', 'module-1', 'New lesson', 5, 99)`);
+  enrollment = (await asUser(alice, 'select * from public.enrollments')).rows[0];
+  assert.equal(enrollment.status, 'in_progress');
+  assert.ok(Number(enrollment.progress_percentage) < 100);
+  assert.equal(enrollment.completed_at, null);
+  await asUser(alice, `update public.enrollments set last_lesson_id = 'new-lesson'`);
+  await db.exec(`delete from public.lessons where course_id = '${course}' and id = 'new-lesson'`);
+  enrollment = (await asUser(alice, 'select * from public.enrollments')).rows[0];
+  assert.equal(enrollment.last_lesson_id, null, 'deleted lesson clears resume location');
+  assert.equal(enrollment.status, 'completed');
+  assert.equal(Number(enrollment.progress_percentage), 100);
+  await db.exec('set role anon;');
+  assert.ok((await db.query('select * from public.lesson_previews')).rows.length > 0);
+  await assert.rejects(db.query('select content from public.lessons'), /permission denied/);
+  await db.exec('reset role;');
+  await db.exec(`update public.courses set is_published = false where id = '${course}'`);
+  await db.exec('set role anon;');
+  assert.equal((await db.query(`select * from public.lesson_previews where course_id = '${course}'`)).rows.length, 0);
+  await db.exec('reset role;');
+  console.log('PASS: existing ID and migration rerun compatibility; all migrations, curriculum changes, public previews, duplicates, own-row RLS, restricted updates, lesson FK, start/resume, completion and review.');
 } finally { await db.close(); }
