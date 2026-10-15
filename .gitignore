@@ -4,3 +4,6 @@ out/
 *.tsbuildinfo
 .env*
 !.env.example
+
+# Private course snapshots and assessment review files
+.assessment-review/

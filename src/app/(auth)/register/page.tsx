@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm } from "@/features/auth/components/auth-form";
 
 export const metadata: Metadata = { title: "Create account | PAP Scholars", robots: { index: false, follow: false } };
 

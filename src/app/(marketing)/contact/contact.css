@@ -39,7 +39,7 @@ textarea.contact-input { resize:vertical; min-height:10rem; }
 .contact-answer-link:hover { text-decoration-color:var(--brand-primary); }
 .contact-page p.text-sm { font-size:1rem; line-height:1.85; }
 .contact-page .text-muted { color:#46566c; }
-@media (hover:hover) { .contact-topic:hover { border-color:var(--brand-primary); box-shadow:0 6px 20px rgb(36 86 166 / 10%); } .contact-input:hover { border-color:#a4b4ca; } }
+@media (hover:hover) { .contact-topic:hover { border-color:#b7c8df; box-shadow:0 6px 20px rgb(24 40 63 / 6%); } .contact-input:hover { border-color:#a4b4ca; } }
 @media (min-width:1024px) { .contact-next-step { display:flex; align-items:center; justify-content:space-between; gap:2rem; } }
 @media (max-width:479px) { .contact-answers-list { padding-inline:1rem; } .contact-faq-answer { padding-right:0; } }
 @media (prefers-reduced-motion:reduce) { .contact-topic { transition:none; } }

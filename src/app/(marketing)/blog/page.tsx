@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { marketingTheme } from "@/config/marketing-theme";
-import { formatArticleDate, readingTime, journalArticles } from "@/data/blog";
+import { formatArticleDate, readingTime, journalArticles } from "@/features/blog/data/articles";
 import Image from "next/image";
 import Link from "next/link";
-import { JournalBrowser } from "@/components/blog/journal-browser";
+import { JournalBrowser } from "@/features/blog/components/journal-browser";
 import { Reveal } from "@/components/animations/reveal";
 
 export const metadata: Metadata = {

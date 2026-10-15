@@ -1,8 +1,8 @@
-import { getStudentEnrollments } from "@/lib/enrollments/server";
+import { getStudentEnrollments } from "@/features/enrollments/server";
 import type { Metadata } from "next";
 import { marketingTheme } from "@/config/marketing-theme";
-import { getPublishedCourses } from "@/lib/courses/server";
-import { CatalogueBrowser } from "@/components/courses/catalogue-browser";
+import { getPublishedCourses } from "@/features/courses/server";
+import { CatalogueBrowser } from "@/features/courses/components/catalogue-browser";
 import Link from "next/link";
 import Image from "next/image";
 import studyImage from "@public/images/courses/academic-excellence.webp";

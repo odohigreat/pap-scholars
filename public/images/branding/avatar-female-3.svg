@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
+  <defs>
+    <clipPath id="avatar"><circle cx="48" cy="48" r="48"/></clipPath>
+    <linearGradient id="background" x1="10" y1="0" x2="86" y2="96" gradientUnits="userSpaceOnUse"><stop stop-color="#e9f0fb"/><stop offset="1" stop-color="#cdddf2"/></linearGradient>
+  </defs>
+  <g clip-path="url(#avatar)">
+    <path fill="url(#background)" d="M0 0h96v96H0z"/>
+    <circle cx="78" cy="22" r="17" fill="#fff" opacity=".3"/>
+    <circle cx="12" cy="75" r="22" fill="#fff" opacity=".25"/>
+    <path d="M16 100V86c0-17 13-25 32-25s32 8 32 25v14" fill="#182b49"/>
+    <path d="M39 58h18v12c-5 7-13 7-18 0V58Z" fill="#70412d"/>
+    <path d="m38 65 10 8-7 9-10-17h7Zm20 0-10 8 7 9 10-17h-7Z" fill="#f5f8fe"/>
+    <path d="M48 74v24" stroke="#10233e" stroke-width="2"/>
+    <path d="M23 38c0-19 9-28 25-28s26 10 26 28l3 35c-13 8-44 8-58 0l4-35Z" fill="#182b49"/>
+    <ellipse cx="29" cy="44" rx="4" ry="6" fill="#805034"/>
+    <ellipse cx="67" cy="44" rx="4" ry="6" fill="#805034"/>
+    <path d="M31 31c0-10 34-10 34 0v17c0 13-8 20-17 20s-17-7-17-20V31Z" fill="#875437"/>
+    <path d="M27 40c-2-18 8-28 22-28 16 0 24 12 20 29-5-2-10-11-13-18-6 9-15 14-29 17Z" fill="#182b49"/>
+    <circle cx="29" cy="51" r="2.5" fill="#d5af68"/>
+    <circle cx="67" cy="51" r="2.5" fill="#d5af68"/>
+    <path d="M26 36v37m5-40v42m34-42v42m5-39v37" stroke="#304561" stroke-width="2" stroke-linecap="round"/>
+    <path d="M37 39h6m10 0h6" stroke="#65422f" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="40" cy="44" rx="1.6" ry="2" fill="#182b49"/>
+    <ellipse cx="56" cy="44" rx="1.6" ry="2" fill="#182b49"/>
+    <path d="m48 46-2 6h4" stroke="#70412d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M41 56c4 4 10 4 14 0" stroke="#804932" stroke-width="2" stroke-linecap="round"/>
+    <path d="M29 85v13m38-13v13" stroke="#10233e" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="58" cy="88" r="3" fill="#d5af68"/>
+  </g>
+</svg>

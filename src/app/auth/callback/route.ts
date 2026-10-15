@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   if (tokenHash && type === "email") {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: "email" });
-    if (!error) return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (!error) return NextResponse.redirect(new URL(next, request.url));
   } else if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);

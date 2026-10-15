@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { StudentDashboard } from "@/components/dashboard/student-dashboard";
+import { StudentDashboard } from "@/features/dashboard/components/student-dashboard";
 import { createClient } from "@/lib/supabase/server";
-import type { DashboardCourse, DashboardActivity } from "@/lib/dashboard/types";
-import { enrollmentFields, type Enrollment } from "@/lib/enrollments/server";
+import type { DashboardCourse, DashboardActivity } from "@/features/dashboard/types";
+import { enrollmentFields, type Enrollment } from "@/features/enrollments/server";
 import "@/app/dashboard/dashboard.css";
+import { getPublishedCourses } from "@/features/courses/server";
 
 export const metadata: Metadata = { title: "Student dashboard | PAP Scholars", robots: { index: false, follow: false } };
 
@@ -12,7 +13,7 @@ export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) redirect("/login");
-  const { data: profile, error: profileError } = await supabase.from("profiles").select("full_name, learning_goal").eq("id", user.id).single();
+  const { data: profile, error: profileError } = await supabase.from("profiles").select("full_name, learning_goal, avatar_url").eq("id", user.id).single();
   if (profileError) throw new Error("Unable to load your profile. Ensure the Supabase schema migration has been applied.");
   const results = await Promise.all([
     supabase.from("enrollments").select(enrollmentFields).eq("user_id", user.id).order("enrolled_at", { ascending: false }),
@@ -41,6 +42,11 @@ export default async function DashboardPage() {
   const progress = results[4].data ?? [];
   const updates = results[5].data ?? [];
   const formatDate = (date: string) => new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" }).format(new Date(date));
+  const assessmentAttempts = await supabase.from("assessment_attempts").select("course_id,score").eq("user_id", user.id);
+  // Keep existing learning features available until the assessment migration is applied.
+  if (assessmentAttempts.error && !["42P01", "PGRST205"].includes(assessmentAttempts.error.code)) {
+    console.error("Unable to load assessment scores", { code: assessmentAttempts.error.code, message: assessmentAttempts.error.message });
+  }
   const courses: DashboardCourse[] = enrollments.flatMap(enrollment => {
     const course = catalog.find(item => item.id === enrollment.course_id);
     if (!course) return [];
@@ -52,6 +58,7 @@ export default async function DashboardPage() {
     const done = ordered.filter(lesson => doneIds.has(lesson.id)).length;
     const next = ordered.find(lesson => lesson.id === enrollment.last_lesson_id) ?? ordered[0];
     return [{ id: course.id, title: course.title, category: course.category, image: course.image_url, imageAlt: course.image_alt,
+      assessmentScore: assessmentAttempts.data?.filter(attempt => attempt.course_id === course.id).reduce<number | undefined>((best, attempt) => Math.max(best ?? 0, attempt.score), undefined),
       done, progress: Number(enrollment.progress_percentage), lastAccessed: Boolean(enrollment.last_lesson_id), total: ordered.length, lesson: next?.title ?? "Lessons coming soon", lessonNumber: next ? ordered.indexOf(next) + 1 : 0, duration: next ? `${next.duration_minutes} min` : "",
       href: next ? `/learn/${encodeURIComponent(course.id)}/${encodeURIComponent(next.id)}` : "/dashboard#my-courses",
       tag: enrollment.status === "completed" ? "Completed" : enrollment.status === "in_progress" ? "In progress" : "Not started" }];
@@ -62,6 +69,6 @@ export default async function DashboardPage() {
     return course && lesson ? [{ id: `${item.course_id}/${item.lesson_id}`, title: `Completed “${lesson.title}”`, detail: course.title, time: formatDate(item.completed_at), icon: "check" as const }] : [];
   }).slice(0, 5);
   const notifications = updates.map(item => ({ id: item.id, title: item.title, text: item.message, time: formatDate(item.created_at), read: Boolean(item.read_at) }));
-  const availableCourses = catalog.filter(course => !enrollments.some(enrollment => enrollment.course_id === course.id)).map(course => ({ id: course.id, title: course.title, category: course.category }));
-  return <StudentDashboard fullName={profile.full_name} email={user.email ?? ""} learningGoal={profile.learning_goal} userId={user.id} availableCourses={availableCourses} courses={courses} activities={activities} notifications={notifications} />;
+  const availableCourses = (await getPublishedCourses()).filter(course => !enrollments.some(enrollment => enrollment.course_id === course.id));
+  return <StudentDashboard avatarUrl={profile.avatar_url} fullName={profile.full_name} email={user.email ?? ""} learningGoal={profile.learning_goal} userId={user.id} availableCourses={availableCourses} courses={courses} activities={activities} notifications={notifications} />;
 }
