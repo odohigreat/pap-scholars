@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { CoursePlayer } from "@/components/learn/course-player";
+import { CoursePlayer } from "@/features/learn/components/course-player";
 import { createClient } from "@/lib/supabase/server";
-import type { LearningCourse } from "@/types/learning";
+import type { LearningCourse } from "@/features/learn/types";
 
 
 

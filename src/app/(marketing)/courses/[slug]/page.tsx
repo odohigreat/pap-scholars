@@ -1,12 +1,12 @@
-import { getStudentEnrollments } from "@/lib/enrollments/server";
+import { getStudentEnrollments } from "@/features/enrollments/server";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { marketingTheme } from "@/config/marketing-theme";
-import { getPublishedCourse, getPublishedCourses } from "@/lib/courses/server";
-import { CatalogueCard } from "@/components/courses/catalogue-card";
-import { StartCourse } from "@/components/courses/start-course";
+import { getPublishedCourse, getPublishedCourses } from "@/features/courses/server";
+import { CatalogueCard } from "@/features/courses/components/catalogue-card";
+import { StartCourse } from "@/features/courses/components/start-course";
 import { Reveal } from "@/components/animations/reveal";
 
 type CourseProps = { params: Promise<{ slug: string }> };

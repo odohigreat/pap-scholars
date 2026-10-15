@@ -67,8 +67,12 @@ For a fresh Supabase project, run these files in the SQL Editor **in order**. On
 | 1 | [Initial schema](supabase/migrations/202610100001_initial_schema.sql) | Tables, seed content, row access policies, and profile creation |
 | 2 | [Enrollment tracking](supabase/migrations/202610100002_enrollment_tracking.sql) | Enrollments, lesson completion, and saved resume locations |
 | 3 | [Catalogue and progress](supabase/migrations/202610110001_catalogue_progress.sql) | Public lesson previews and progress updates when the curriculum changes |
+| 4 | [Course assessments](supabase/migrations/202610150001_course_assessments.sql) | Private answer keys, server grading, and saved assessment scores |
+| 5 | [Assessment review workflow](supabase/migrations/202610150002_assessment_review_workflow.sql) | Twenty-question drafts per course, content-change detection, reviewed publication, and versioned results |
 
 Published courses are available in the public catalogue. The `lesson_previews` view exposes lesson titles and ordering; full lesson content is restricted to enrolled students.
+
+Assessments unlock after all lessons are completed. Each course has a 20-question assessment, a 60% pass mark (12 correct answers), answer explanations, and unlimited retries. The six initial banks contain 120 unpublished draft questions covering all 59 lesson topics. Course edits flag questions for review; only reviewed drafts can be published. Scores are graded by a database function and saved by revision. On an existing app, run the [combined assessment setup](supabase/setup-course-assessments.sql) (or migrations 4 and 5 in order), then follow the [assessment review workflow](supabase/assessments/README.md) to review and publish each set.
 
 Enrollment progress is maintained by database triggers. Resume locations are saved after the lesson player mounts. Curriculum changes recalculate progress, and removing a lesson clears saved resume references to it.
 
@@ -98,13 +102,20 @@ pap-scholars/
 │   │   ├── auth/            Email confirmation callback
 │   │   ├── dashboard/       Student dashboard
 │   │   └── learn/           Protected lesson pages
-│   ├── components/          Components grouped by feature
-│   ├── config/              Shared theme configuration
-│   ├── constants/           Navigation constants
-│   ├── data/                Course content and journal articles
-│   ├── lib/                 Supabase clients and server data access
-│   ├── types/               Shared TypeScript models
+│   ├── features/            Feature components, data, models, and server code
+│   │   ├── auth/            Account forms
+│   │   ├── blog/            Journal components, articles, and models
+│   │   ├── contact/         Contact form
+│   │   ├── courses/         Catalogue UI, queries, and sample course data
+│   │   ├── dashboard/       Student dashboard UI and models
+│   │   ├── enrollments/     Enrollment queries and learning server actions
+│   │   ├── home/            Homepage sections
+│   │   └── learn/           Lesson player, models, and demo curriculum
+│   ├── components/          Shared animations, layout, and UI controls
+│   ├── config/              Theme and navigation configuration
+│   ├── lib/supabase/        Browser and server Supabase clients
 │   └── proxy.ts             Session middleware
+├── docs/design/             Image generation briefs and prompts
 ├── public/                  Images and static assets
 ├── supabase/
 │   ├── migrations/          Ordered database migrations
@@ -113,7 +124,9 @@ pap-scholars/
 └── README.md
 ```
 
-Use `@/` to import application code from `src/` and `@public/` for bundled static assets. Keep feature components together, shared controls in `src/components/ui/`, and data access in `src/lib/`.
+Use `@/` to import application code from `src/` and `@public/` for bundled static assets. Keep feature-specific code in `src/features/<feature>/`: UI in `components/`, local content in `data/`, models in `types.ts`, database queries in `server.ts`, and server actions in `actions.ts`. Shared layout, animations, and controls belong in `src/components/`; infrastructure clients belong in `src/lib/`.
+
+Route files in `src/app/` compose features and own route metadata, layouts, and page styles. Import feature files directly so client components do not accidentally pull in server-only modules through barrel exports. Demo course data is explicitly named and separate from Supabase queries. Keep image generation notes in `docs/design/` rather than the publicly served asset directory.
 
 Framework configuration, package files, and environment files stay at the project root. Restart the development server after moving route folders.
 
@@ -134,13 +147,16 @@ The migration script checks enrollment behavior, curriculum updates, and row acc
 ```sh
 npm install --prefix /tmp/pap-enrollment-check --no-package-lock @electric-sql/pglite
 PAP_PGLITE_MODULE=/tmp/pap-enrollment-check/node_modules/@electric-sql/pglite/dist/index.js node scripts/check-enrollment-migrations.mjs
+PAP_PGLITE_MODULE=/tmp/pap-enrollment-check/node_modules/@electric-sql/pglite/dist/index.js node scripts/check-assessment-migrations.mjs
+PAP_PGLITE_MODULE=/tmp/pap-enrollment-check/node_modules/@electric-sql/pglite/dist/index.js node scripts/check-assessment-review.mjs
 ```
 
-This check does not modify the connected Supabase project.
+These checks do not modify the connected Supabase project. The assessment check covers scoring, prerequisites, invalid answers, retries, best/latest results, private answer keys, and access to scores.
 
 ## Current project status
 
 - Account details, published courses, enrollments, and learning progress use Supabase.
-- Journal articles are maintained locally in `src/data/blog.ts`.
+- Dashboard Profile (`/dashboard#profile`) lets students update their name and learning goal and change their password after verifying their current password.
+- Journal articles are maintained locally in `src/features/blog/data/articles.ts`.
 - The Contact form previews messages locally; it does not send or save them.
 - Seeded sample videos should be replaced with the intended course media before launch.

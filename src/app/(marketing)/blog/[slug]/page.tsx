@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { marketingTheme } from "@/config/marketing-theme";
-import { formatArticleDate, getArticle, journalArticles, readingTime } from "@/data/blog";
-import { BlogCard } from "@/components/blog/blog-card";
+import { formatArticleDate, getArticle, journalArticles, readingTime } from "@/features/blog/data/articles";
+import { BlogCard } from "@/features/blog/components/blog-card";
 import { Reveal } from "@/components/animations/reveal";
 
 type ArticleProps = { params: Promise<{ slug: string }> };

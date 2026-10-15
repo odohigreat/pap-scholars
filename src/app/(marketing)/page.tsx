@@ -1,10 +1,10 @@
 import { HomepageScroll } from "@/components/animations/homepage-scroll";
-import { Hero } from "@/components/home/hero";
-import { LearningBenefits } from "@/components/home/learning-benefits";
-import { Intro } from "@/components/home/intro";
-import { FeaturedCourses } from "@/components/home/featured-courses";
-import { FeaturedBlog } from "@/components/home/featured-blog";
-import { FinalCta } from "@/components/home/final-cta";
+import { Hero } from "@/features/home/components/hero";
+import { LearningBenefits } from "@/features/home/components/learning-benefits";
+import { Intro } from "@/features/home/components/intro";
+import { FeaturedCourses } from "@/features/home/components/featured-courses";
+import { FeaturedBlog } from "@/features/home/components/featured-blog";
+import { FinalCta } from "@/features/home/components/final-cta";
 
 export default function HomePage() {
   return (

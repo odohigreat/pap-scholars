@@ -3,24 +3,24 @@ import Link from "next/link";
 import logo from "@public/images/branding/pap-scholars-logo.png";
 import programmeLogo from "@public/images/branding/image.png";
 
-export function Brand({ showLogo = false }: { showLogo?: boolean }) {
+export function Brand({ showLogo = false, href = "/", compact = false }: { showLogo?: boolean; href?: string; compact?: boolean }) {
   return (
-    <Link href="/" aria-label="PAP Scholars home" className="inline-flex shrink-0 items-center gap-3 rounded-control">
+    <Link href={href} aria-label={href === "/dashboard" ? "PAP Scholars dashboard" : "PAP Scholars home"} className={compact ? "inline-flex min-w-0 flex-col items-start gap-2 rounded-control" : "inline-flex shrink-0 items-center gap-3 rounded-control"}>
       {showLogo ? (
         <span className="inline-flex shrink-0 items-center gap-2">
           <Image
             src={programmeLogo}
             alt="Presidential Amnesty Programme logo"
-            sizes="(min-width: 640px) 56px, 48px"
+            sizes={compact ? "40px" : "(min-width: 640px) 56px, 48px"}
             preload
-            className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+            className={compact ? "size-10 shrink-0 object-contain" : "h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"}
           />
           <Image
             src={logo}
             alt="PAP Scholars logo"
-            sizes="(min-width: 640px) 56px, 48px"
+            sizes={compact ? "40px" : "(min-width: 640px) 56px, 48px"}
             preload
-            className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+            className={compact ? "size-10 shrink-0 object-contain" : "h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"}
           />
         </span>
       ) : (
@@ -28,7 +28,7 @@ export function Brand({ showLogo = false }: { showLogo?: boolean }) {
           P<span className="text-accent">.</span>
         </span>
       )}
-      <span className="text-lg font-semibold tracking-tight text-foreground">PAP <span className="font-normal">Scholars</span></span>
+      <span className={`${compact ? "text-base" : "text-lg"} font-semibold tracking-tight text-foreground`}>PAP <span className="font-normal">Scholars</span></span>
     </Link>
   );
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import campus from "@public/images/home/pap-scholars-campus.webp";
 import { marketingTheme } from "@/config/marketing-theme";
 import { Reveal } from "@/components/animations/reveal";
-import { ContactForm } from "@/components/contact/contact-form";
+import { ContactForm } from "@/features/contact/components/contact-form";
 
 export const metadata: Metadata = { title: "Contact | PAP Scholars", description: "Get in touch with PAP Scholars about learning, the platform, or collaboration. Explore our demo contact form." };
 
